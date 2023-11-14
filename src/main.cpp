@@ -10,8 +10,6 @@ WebSocketsServer webSocket = WebSocketsServer(webSocketPort);
 
 AsyncWebServer server(80);
 
-int counter = 0;
-
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
 {
   switch (type)
@@ -38,25 +36,27 @@ void setup()
   M5.Lcd.setCursor(10, 10);
   Serial.begin(115200);
   Serial.print("Connecting");
-  WiFi.begin();
+  // WiFi.begin();
   while (WiFi.status() != WL_CONNECTED)
   {
-    if (!(millis() % 20000))
+    if (millis() > 10000)
     {
       Serial.println("Smart Config Start!");
       WiFi.beginSmartConfig();
       while (!WiFi.smartConfigDone())
       {
-        if (!(millis() % 5000))
+        if (millis() % 500 == 0)
         {
           Serial.print(".");
+          delay(1);
         }
       }
       Serial.println("Smart Config Done!");
     }
-    if (!(millis() % 5000))
+    if (millis() % 500 == 0)
     {
       Serial.print(".");
+      delay(1);
     }
   }
 
@@ -86,10 +86,9 @@ void loop()
 {
   webSocket.loop();
   // Increase the counter value every second
-  counter++;
-  if (counter % 10000 == 0)
+  if (millis() % 1000 == 0)
   {
-    String message = String(counter / 10000);
+    String message = String(millis() / 1000);
     webSocket.broadcastTXT(message);
     M5.Display.clear();
     M5.Lcd.setCursor(10, 10);
