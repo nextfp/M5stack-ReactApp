@@ -1,49 +1,9 @@
 <!DOCTYPE html>
 <head>
   <meta charset="utf-8">
-  <title>React tsx-esm-standalone</title>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script>
-    // typescript用のpresetを登録する
-    Babel.registerPreset('tsx', {
-      presets: [
-        [Babel.availablePresets['typescript'], // preset-typescriptを指定
-          {allExtensions: true, isTSX: true}   // allExtensionsは、isTSX利用時に必要なためセット
-        ]],
-      },
-    );
-  </script>
-  <script type="text/babel" data-type="module" data-presets="tsx,react">
-import React, { useState } from "https://cdn.skypack.dev/react@17";
-    import ReactDOM from "https://cdn.skypack.dev/react-dom@17";
-const Count = () => {
-  const [counter, setCounter] = React.useState(0);
-
-  React.useEffect(() => {
-    const socket = new WebSocket("ws://192.168.68.107:81"); // M5StackのIPアドレスを指定
-
-    socket.onmessage = (event) => {
-      const data = event.data;
-      console.log(data);
-      setCounter(data);
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, []);
-
-  return (
-    <div>
-      <h1>Counter Value: {counter}</h1>
-    </div>
-  );
-};
-
-ReactDOM.render(<Count />, document.getElementById('app'));
-  </script>
+  <title>Hello World!</title>
 </head>
 <body>
-  <div id="app"></div>
+  <h1>Hello World</h1>
 </body>
 </html>
