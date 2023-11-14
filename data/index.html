@@ -1,9 +1,36 @@
 <!DOCTYPE html>
 <head>
   <meta charset="utf-8">
-  <title>Hello World!</title>
+  <title>React tsx-esm-standalone</title>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script>
+    // typescript用のpresetを登録する
+    Babel.registerPreset('tsx', {
+      presets: [
+        [Babel.availablePresets['typescript'], // preset-typescriptを指定
+          {allExtensions: true, isTSX: true}   // allExtensionsは、isTSX利用時に必要なためセット
+        ]],
+      },
+    );
+  </script>
+  <script type="text/babel" data-type="module" data-presets="tsx,react">
+    import React from "https://cdn.skypack.dev/react@17";
+    import ReactDOM from "https://cdn.skypack.dev/react-dom@17";
+    const Button = () => {
+      function handleClick() {
+        alert('You clicked me!');
+      }
+
+      return (
+        <button onClick={handleClick}>
+          Click me
+        </button>
+      );
+    }
+    ReactDOM.render(<Button />, document.getElementById('app'));
+  </script>
 </head>
 <body>
-  <h1>Hello World</h1>
+  <div id="app"></div>
 </body>
 </html>
