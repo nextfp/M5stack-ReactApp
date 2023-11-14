@@ -1,0 +1,2 @@
+m5unfiedを使うことで動かない問題を回避。
+m5unifiedを使うときは、M5Unified.hを使うようにすると、FS.hがない、というエラーが出ることがある。M5Stackライブラリを追加しちゃった→その後削除しても設定が残っているのが原因。platformio.iniのlib_depsに書いてあるM5Stackを消せばOK。基本的に.pioや.vscodeはplatformio.iniから生成されるので、これが原本と考えるのがよさそう。
