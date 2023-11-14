@@ -4,12 +4,10 @@
 #include <WebSocketsServer.h>
 #include "ESPAsyncWebServer.h"
 #include <SPIFFS.h> // SPIFFS（ファイルシステム）用のライブラリをインクルード
-#include <FS.h>
 
 const int webSocketPort = 81;
 WebSocketsServer webSocket = WebSocketsServer(webSocketPort);
 
-// WebServer server(80); // ポート80でWebサーバーを開始
 AsyncWebServer server(80);
 
 int counter = 0;
@@ -38,24 +36,28 @@ void setup()
   M5.Lcd.setTextColor(WHITE, BLACK);
   M5.Lcd.setTextSize(10);
   M5.Lcd.setCursor(10, 10);
-  int i = 1;
   Serial.begin(115200);
   Serial.print("Connecting");
+  WiFi.begin();
   while (WiFi.status() != WL_CONNECTED)
   {
-    if (i++ > 1)
-    { // 10 seconds
+    if (!(millis() % 20000))
+    {
       Serial.println("Smart Config Start!");
       WiFi.beginSmartConfig();
       while (!WiFi.smartConfigDone())
       {
-        delay(500);
-        Serial.print(".");
+        if (!(millis() % 5000))
+        {
+          Serial.print(".");
+        }
       }
       Serial.println("Smart Config Done!");
     }
-    delay(500);
-    Serial.print(".");
+    if (!(millis() % 5000))
+    {
+      Serial.print(".");
+    }
   }
 
   Serial.println("WiFi Connected.");
