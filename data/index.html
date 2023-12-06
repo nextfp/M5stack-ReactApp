@@ -1,51 +1,64 @@
 <!DOCTYPE html>
-<head>
-  <meta charset="utf-8">
-  <title>React tsx-esm-standalone</title>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script>
-    const WebSocketUrl = window.location.href.replace("http", "ws").slice(0,-1) + ":81";
-  </script>
-  <script>
-    // typescript用のpresetを登録する
-    Babel.registerPreset('tsx', {
-      presets: [
-        [Babel.availablePresets['typescript'], // preset-typescriptを指定
-          {allExtensions: true, isTSX: true}   // allExtensionsは、isTSX利用時に必要なためセット
-        ]],
-      },
-    );
-  </script>
-  <script type="text/babel" data-type="module" data-presets="tsx,react">
-import React, { useState } from "https://cdn.skypack.dev/react@17";
-    import ReactDOM from "https://cdn.skypack.dev/react-dom@17";
-const Count = () => {
-  const [counter, setCounter] = React.useState(0);
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>React tsx-esm-standalone</title>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>
+      const WebSocketUrl =
+        window.location.href.replace("http", "ws").slice(0, -1) + ":81";
+    </script>
+    <script>
+      // typescript用のpresetを登録する
+      Babel.registerPreset("tsx", {
+        presets: [
+          [
+            Babel.availablePresets["typescript"], // preset-typescriptを指定
+            { allExtensions: true, isTSX: true }, // allExtensionsは、isTSX利用時に必要なためセット
+          ],
+        ],
+      });
+    </script>
+    <script type="text/babel" data-type="module" data-presets="tsx,react">
+      import React, { useState } from "https://cdn.skypack.dev/react@17";
+      import ReactDOM from "https://cdn.skypack.dev/react-dom@17";
+      const Count = () => {
+        const [counter, setCounter] = React.useState(0);
 
-  React.useEffect(() => {
-    const socket = new WebSocket(WebSocketUrl); // M5StackのIPアドレスを指定
+        React.useEffect(() => {
+          const socket = new WebSocket(WebSocketUrl); // M5StackのIPアドレスを指定
 
-    socket.onmessage = (event) => {
-      const data = event.data;
-      setCounter(data);
-    };
+          socket.onmessage = (event) => {
+            const data = event.data;
+            setCounter(data);
+          };
 
-    return () => {
-      socket.close();
-    };
-  }, []);
+          return () => {
+            socket.close();
+          };
+        }, []);
 
-  return (
-    <div>
-      <h1>Counter Value: {counter}</h1>
-    </div>
-  );
-};
+        return (
+          <div>
+            <h1>ステアリングの角度: {counter}</h1>
+            <div style={{ marginTop: "50px" }}>
+              <img
+                style={{
+                  transform: `rotate(${counter}deg)`,
+                  transformOrigin: "center center",
+                }}
+                src="https://nextfp.github.io/note/cdn/SteeringWheel.png"
+                alt=""
+              />
+            </div>
+          </div>
+        );
+      };
 
-ReactDOM.render(<Count />, document.getElementById('app'));
-  </script>
-</head>
-<body>
-  <div id="app"></div>
-</body>
+      ReactDOM.render(<Count />, document.getElementById("app"));
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
 </html>
