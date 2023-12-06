@@ -5,6 +5,9 @@
 #include "ESPAsyncWebServer.h"
 #include <SPIFFS.h> // SPIFFS（ファイルシステム）用のライブラリをインクルード
 
+const char *ssid = "Buffalo-G-E120";    // WiFiのSSID
+const char *password = "5xxh6ig4ruepn"; // WiFiのパスワード
+
 const int webSocketPort = 81;
 WebSocketsServer webSocket = WebSocketsServer(webSocketPort);
 
@@ -34,9 +37,10 @@ void setup()
   M5.Lcd.setTextColor(WHITE, BLACK);
   M5.Lcd.setTextSize(10);
   M5.Lcd.setCursor(10, 10);
+  pinMode(36, INPUT);
   Serial.begin(115200);
   Serial.print("Connecting");
-  // WiFi.begin();
+  WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED)
   {
     if (millis() > 10000)
@@ -85,13 +89,14 @@ void setup()
 void loop()
 {
   webSocket.loop();
-  // Increase the counter value every second
-  if (millis() % 1000 == 0)
-  {
-    String message = String(millis() / 1000);
-    webSocket.broadcastTXT(message);
-    M5.Display.clear();
-    M5.Lcd.setCursor(10, 10);
-    M5.Display.println(message);
-  }
+
+  double message = (analogReadMilliVolts(36) - 142) * 0.077 - 115; // * 0.077
+  String messageStr = String(message);
+  webSocket.broadcastTXT(messageStr);
+  M5.Display.clear();
+  M5.Lcd.setCursor(10, 10);
+  M5.Display.println(message);
+  delay(100);
 }
+
+// 2748 422
